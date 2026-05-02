@@ -1,18 +1,16 @@
 - hosts: localhost
-
   tasks:
-
-    - name: Replace Docker image
+    - name: Replace Docker image in Kubernetes manifest
       replace:
         path: ../k8s/deployment.yaml
         regexp: 'IMAGE_PLACEHOLDER'
         replace: '{{ image }}'
 
     - name: Apply Deployment
-      command: kubectl apply -f ../k8s/deployment.yaml --validate=false
+      command: kubectl apply -f ../k8s/deployment.yaml --insecure-skip-tls-verify=true
 
     - name: Apply Service
-      command: kubectl apply -f ../k8s/service.yaml --validate=false
+      command: kubectl apply -f ../k8s/service.yaml --insecure-skip-tls-verify=true
 
     - name: Apply Ingress
-      command: kubectl apply -f ../k8s/ingress.yaml --validate=false
+      command: kubectl apply -f ../k8s/ingress.yaml --insecure-skip-tls-verify=true
