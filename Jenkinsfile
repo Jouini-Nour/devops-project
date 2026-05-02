@@ -2,10 +2,6 @@ pipeline {
 
     agent any
 
-    tools {
-        sonarQube 'sonar-scanner'
-    }
-
     environment {
         IMAGE_NAME = "joujo/devops-app"
     }
@@ -29,6 +25,7 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+
             steps {
 
                 dir('app') {
@@ -36,7 +33,9 @@ pipeline {
                     withSonarQubeEnv('sonarqube') {
 
                         sh '''
-                        sonar-scanner
+                        sonar-scanner \
+                        -Dsonar.projectKey=devops-app \
+                        -Dsonar.sources=. \
                         '''
 
                     }
@@ -44,7 +43,9 @@ pipeline {
                 }
 
             }
+
         }
 
     }
+
 }
