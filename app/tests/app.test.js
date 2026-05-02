@@ -1,14 +1,35 @@
 const request = require('supertest');
+const express = require('express');
 
 const app = require('../server');
 
-describe('GET /', () => {
+describe('DevOps App Tests', () => {
 
-    it('should return 200', async () => {
+    test('GET / should return 200', async () => {
 
-        const res = await request(app).get('/');
+        const response = await request(app).get('/');
 
-        expect(res.statusCode).toEqual(200);
+        expect(response.statusCode).toBe(200);
+
+    });
+
+    test('GET /health should return status UP', async () => {
+
+        const response = await request(app).get('/health');
+
+        expect(response.statusCode).toBe(200);
+
+        expect(response.body.status).toBe('UP');
+
+    });
+
+    test('GET /metrics should return prometheus metrics', async () => {
+
+        const response = await request(app).get('/metrics');
+
+        expect(response.statusCode).toBe(200);
+
+        expect(response.text).toContain('process_cpu_user_seconds_total');
 
     });
 
