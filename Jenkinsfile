@@ -99,11 +99,19 @@ pipeline {
         }
 
         stage('Smoke Test') {
+
             steps {
 
                 sh '''
-                kubectl get pods -n devops
-                kubectl get svc -n devops
+
+                kubectl get all -n devops > cluster-state.txt
+
+                URL=$(minikube service devops-service -n devops --url)
+
+                echo $URL > app-url.txt
+
+                curl -f $URL/health > smoke-test-result.txt
+
                 '''
 
             }
