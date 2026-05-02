@@ -2,13 +2,15 @@ pipeline {
 
     agent any
 
-    stages {
+    tools {
+        sonarQube 'sonar-scanner'
+    }
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Jouini-Nour/devops-project.git'
-            }
-        }
+    environment {
+        IMAGE_NAME = "joujo/devops-app"
+    }
+
+    stages {
 
         stage('Install Dependencies') {
             steps {
@@ -23,6 +25,24 @@ pipeline {
                 dir('app') {
                     sh 'npm test'
                 }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+
+                dir('app') {
+
+                    withSonarQubeEnv('sonarqube') {
+
+                        sh '''
+                        sonar-scanner
+                        '''
+
+                    }
+
+                }
+
             }
         }
 
