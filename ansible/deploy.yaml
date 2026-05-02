@@ -9,10 +9,10 @@
         replace: '{{ image }}'
 
     - name: Apply Deployment
-      command: kubectl apply -f ../k8s/deployment.yaml
+      command: kubectl apply -f ../k8s/deployment.yaml --validate=false
 
     - name: Apply Service
-      command: kubectl apply -f ../k8s/service.yaml
+      command: kubectl apply -f ../k8s/service.yaml --validate=false
 
     - name: Apply Ingress
-      command: kubectl apply -f ../k8s/ingress.yaml
+      command: kubectl apply -f ../k8s/ingress.yaml --validate=false
