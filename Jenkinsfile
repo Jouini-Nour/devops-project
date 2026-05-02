@@ -77,7 +77,8 @@ pipeline {
         }
         stage('Terraform Apply') {
             steps {
-                dir('terraform') {
+                // Cette commande télécharge temporairement le secret dans une variable $KUBECONFIG
+                withCredentials([file(credentialsId: 'k8s-config-file', variable: 'KUBECONFIG')]) {
                     sh 'terraform init'
                     sh 'terraform apply -auto-approve'
                 }
