@@ -32,14 +32,16 @@ pipeline {
 
                     withSonarQubeEnv('sonarqube') {
 
-                        sh '''
-                        sonar-scanner \
-                        -Dsonar.projectKey=devops-app \
-                        -Dsonar.sources=. \
-                        '''
-
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=devops-app \
+                    -Dsonar.sources=. \
+                    -Dsonar.tests=tests \
+                    -Dsonar.test.inclusions=**/*.test.js \
+                    -Dsonar.exclusions=**/node_modules/**
+                    '''
+                    
                     }
-
                 }
 
             }
