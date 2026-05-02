@@ -75,5 +75,38 @@ pipeline {
                 }
             }
         }
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Ansible Deploy') {
+            steps {
+                dir('ansible') {
+
+                    sh """
+                    ansible-playbook \
+                    -i inventory \
+                    deploy.yaml \
+                    --extra-vars "image=$IMAGE_NAME:${BUILD_NUMBER}"
+                    """
+                }
+            }
+        }
+
+        stage('Smoke Test') {
+            steps {
+
+                sh '''
+                kubectl get pods -n devops
+                kubectl get svc -n devops
+                '''
+
+            }
+        }
     }
 }
